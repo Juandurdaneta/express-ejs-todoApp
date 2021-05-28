@@ -1,35 +1,29 @@
 //jshint esversion:6
 const express = require("express");
-const bodyParser = require("body-parser");
+const date = require(__dirname+"/date.js");
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.set("view engine", "ejs");
 app.use(express.static("public"));
-var items =[];
+
+const items =[];
+
 
 app.get("/", (req, res) => {
   
-  var options = {
-    weekday : 'long',
-    month : 'long',
-    day : 'numeric'
-  }
-  var today = new Date();
-  today.setDate(today.getDate());
-  var todayIs = today.toLocaleDateString("en-US", options);
+  let day = date.getDate();
 
-  res.render("list", { dayOfTheWeek: todayIs, newTodo : items });
+  res.render("list", { dayOfTheWeek: day, newTodo : items });
 
 });
 
 app.post("/", (req, res)=>{
-  var item = req.body.newTodo;
+  let item = req.body.newTodo;
   items.push(item);
   res.redirect('/');
 });
-
 
 app.get("/about", (req,res) =>{
   res.render("about");

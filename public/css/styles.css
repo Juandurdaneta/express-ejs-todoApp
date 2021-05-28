@@ -42,7 +42,7 @@ input:checked + p {
 }
 
 .tasks {
-  color: #fff3e2;
+  color: white;
   background-color: #000518;
   margin-top: 50px;
 }
