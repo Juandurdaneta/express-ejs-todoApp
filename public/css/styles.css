@@ -1,42 +1,48 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
-body{
-    text-align: center;
-    color: #706897;
-    font-family: 'Poppins', sans-serif;
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap");
+body {
+  text-align: center;
+  color: #706897;
+  font-family: "Poppins", sans-serif;
+}
+p {
+  margin-top: 10px;
+  font-size: 1.2rem;
 }
 
-
-#main_section{
-    background-image: url(https://cdn.dribbble.com/users/648922/screenshots/14120767/media/4dec967491175dcf45e70ae6015a4060.png);
-    height: 100vh;
+input:checked + p {
+  text-decoration: line-through;
+  text-decoration-color: #fff3e2;
 }
-#date{
-    margin-top: 10%;
-    border-radius: 2%;
-    padding: 3%;
-    background-color: #fff3e2;
+
+#main_section {
+  background-image: url(https://cdn.dribbble.com/users/648922/screenshots/14120767/media/4dec967491175dcf45e70ae6015a4060.png);
+  height: 100vh;
+}
+#date {
+  margin-top: 10%;
+  border-radius: 2%;
+  padding: 3%;
+  background-color: #fff3e2;
+}
+
+#flexCheckDefault {
+  background-color: #000518;
+  border: 2px solid white;
 }
 
 @media (max-width: 992px) {
-    #date{
-        width: 80%;
-        margin-left: 3rem;
-    }
-    .tasks{
-        width: 80%;
-        margin-left: 3rem;
-    }
+  #date {
+    width: 90%;
+    margin-left: 2rem;
+  }
+  .tasks {
+    width: 90%;
+    margin-left: 2rem;
+  }
 }
 
-.tasks{
-    color: #fff3e2;
-    background-color: #000518;
-    margin-top: 50px;
+.tasks {
+  color: #fff3e2;
+  background-color: #000518;
+  margin-top: 50px;
 }
-
-#flexCheckDefault{
-    background-color: #000518;
-    border: 2px solid white;
-
-}
-
