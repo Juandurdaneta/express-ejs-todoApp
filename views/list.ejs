@@ -39,17 +39,15 @@
               <% for( let index = 0; index < newTodo.length; index++ ) { %>
                 <div class="form-check">
                   <input type="checkbox" name="checkBox" id="flexCheckDefault" class="form-check-input" value=""/>
-                  <label class="form-check-label" for="flexCheckDefault">
-                     <%= newTodo[index]%>
-                  </label>
+                  <label class="form-check-label" for="flexCheckDefault"><%=newTodo[index]%></label> 
                 </div>
-                 
+                <br>
                 
                 
               <% } %>
             
 
-            <form action="/" method="post" class="row g-3 mb-3">
+            <form action="/" method="post" class="row">
               <div class="col">
                 <div class="form-outline form-white ">
                   <input type="text" id="newTodo" class="form-control" name="newTodo"/>
