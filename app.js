@@ -1,6 +1,7 @@
 //jshint esversion:6
 const express = require("express");
-const date = require(__dirname+"/date.js");
+const mongoose = require("mongoose");
+
 const app = express();
 
 app.use(express.json());
@@ -8,14 +9,44 @@ app.use(express.urlencoded({extended:true}));
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 
-const items =[];
+mongoose.connect("mongodb://localhost:27017/todolistDB", { useUnifiedTopology: true, useNewUrlParser: true });
 
+
+//Items Schema and Model MONGOOSE
+
+const itemsSchema = new mongoose.Schema({
+  name : String
+});
+
+const Item = mongoose.model("Item", itemsSchema);
+
+const item1 = new Item({
+  name : "Welcome!"
+});
+
+
+const item2 = new Item({
+  name : "Press the + button to add a new item"
+});
+
+const item3 = new Item({
+  name : "<--- Press this button to delete an item"
+});
+
+
+const defaultItems = [item1, item2, item3];
+
+
+Item.insertMany(defaultItems, function(err){
+  if(err){
+    console.log(err);
+  } else{
+    console.log("Items added succesfully!");
+  }
+})
 
 app.get("/", (req, res) => {
-  
-  let day = date.getDate();
-
-  res.render("list", { dayOfTheWeek: day, newTodo : items });
+  res.render("list", { dayOfTheWeek: "Today", newTodo : items });
 
 });
 
