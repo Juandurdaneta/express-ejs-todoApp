@@ -37,17 +37,23 @@ const item3 = new Item({
 const defaultItems = [item1, item2, item3];
 
 
-Item.insertMany(defaultItems, function(err){
-  if(err){
-    console.log(err);
-  } else{
-    console.log("Items added succesfully!");
-  }
-})
-
 app.get("/", (req, res) => {
-  res.render("list", { dayOfTheWeek: "Today", newTodo : items });
 
+  //GETTING THE ITEMS FROM THE DATABASE
+  Item.find({}, (err, foundItems) =>{
+    if (foundItems.length === 0){
+      Item.insertMany(defaultItems, function(err){
+        if(err){
+          console.log(err);
+        } else{
+          console.log("Items added succesfully!");
+        }
+      });
+      res.redirect("/");      
+    } else{
+      res.render("list", { dayOfTheWeek: "Today", newTodo : foundItems });
+    }
+    });
 });
 
 app.post("/", (req, res)=>{
