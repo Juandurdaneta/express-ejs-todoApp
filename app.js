@@ -57,10 +57,26 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", (req, res)=>{
-  let item = req.body.newTodo;
-  items.push(item);
-  res.redirect('/');
+  const itemName = req.body.newTodo;
+ 
+  const newItem = new Item({
+    name : itemName
+  })
+
+  newItem.save().then(res.redirect("/"));
+
 });
+
+app.post("/delete", (req, res) =>{
+  const checkedId = req.body.checkBox;
+  Item.findByIdAndRemove(checkedId, (err) =>{
+    if(err){
+      console.log(err);
+    }else{
+      res.redirect("/");
+    }
+  })
+})
 
 app.get("/about", (req,res) =>{
   res.render("about");

@@ -14,10 +14,12 @@
             <div class="rounded shadow-5-strong p-5 tasks text-start">
           
                 <% newTodo.forEach(todo => { %>
+                  <form action="/delete" method="post" >
                   <div class="form-check">
-                    <input type="checkbox" name="checkBox" id="flexCheckDefault" class="form-check-input" value=""/>  
+                    <input value="<%=todo._id%>" onChange="this.form.submit()" type="checkbox" name="checkBox" id="flexCheckDefault" class="form-check-input"/>  
                      <p><%=todo.name %></p>
                   </div>
+                </form>
                 <% }) %>
 
 
