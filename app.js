@@ -33,6 +33,12 @@ const item3 = new Item({
   name : "<--- Press this button to delete an item"
 });
 
+const listSchema = new mongoose.Schema({
+  name: String,
+  items: [itemsSchema]
+});
+
+const List = mongoose.model("List", listSchema);
 
 const defaultItems = [item1, item2, item3];
 
@@ -51,19 +57,32 @@ app.get("/", (req, res) => {
       });
       res.redirect("/");      
     } else{
-      res.render("list", { dayOfTheWeek: "Today", newTodo : foundItems });
+      res.render("list", { listTitle: "Today", newTodo : foundItems });
     }
     });
 });
 
 app.post("/", (req, res)=>{
   const itemName = req.body.newTodo;
- 
+  const listName = req.body.list;
+  console.log(listName);
+
   const newItem = new Item({
     name : itemName
   })
 
-  newItem.save().then(res.redirect("/"));
+  if(listName == "Today"){
+    newItem.save().then(res.redirect("/"));
+  } else {
+    List.findOne({name: listName}, (err, foundList) =>{
+      if(!err){
+        foundList.items.push(newItem);
+        foundList.save();
+        res.redirect("/"+listName);
+      }
+    })
+  }
+
 
 });
 
@@ -77,6 +96,28 @@ app.post("/delete", (req, res) =>{
     }
   })
 })
+
+app.get("/:customListName", (req, res) =>{
+  const customListName = req.params.customListName;
+  List.findOne({name: customListName}, (err, listsFound)=>{
+    if(!err){
+      if(!listsFound){
+        // IF THE LIST DOESNT EXISTS, THEN WE CREATE A NEW LIST
+        const list = new List({
+        name : customListName,
+        items: defaultItems
+        })
+        list.save().then(res.redirect("/"+customListName));
+      } else{
+        // IF THE LIST ALREADY EXIST THEN WE SHOW THE LIST
+        res.render("list", { listTitle: listsFound.name, newTodo : listsFound.items });
+
+      }
+    }
+    
+  })
+
+});
 
 app.get("/about", (req,res) =>{
   res.render("about");
