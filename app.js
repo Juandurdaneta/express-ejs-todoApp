@@ -1,7 +1,7 @@
 //jshint esversion:6
 const express = require("express");
 const mongoose = require("mongoose");
-
+const _ = require("lodash");
 const app = express();
 
 app.use(express.json());
@@ -88,17 +88,32 @@ app.post("/", (req, res)=>{
 
 app.post("/delete", (req, res) =>{
   const checkedId = req.body.checkBox;
-  Item.findByIdAndRemove(checkedId, (err) =>{
-    if(err){
-      console.log(err);
-    }else{
-      res.redirect("/");
-    }
-  })
+  const listName = req.body.listName;
+
+  if(listName == "Today"){
+    Item.findByIdAndRemove(checkedId, (err) =>{
+      if(err){
+        console.log(err);
+      }else{
+        res.redirect("/");
+      }
+    })
+  } else{
+    List.findOneAndUpdate({name: listName}, {$pull:{items: {_id: checkedId}}}, (err, foundList)=>{
+          if(!err){
+            res.redirect("/"+listName);
+          }
+    });
+  }
+
+
 })
 
 app.get("/:customListName", (req, res) =>{
-  const customListName = req.params.customListName;
+  const customListName = _.capitalize(req.params.customListName);
+
+
+
   List.findOne({name: customListName}, (err, listsFound)=>{
     if(!err){
       if(!listsFound){
