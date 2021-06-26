@@ -9,7 +9,7 @@ app.use(express.urlencoded({extended:true}));
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/todolistDB", { useUnifiedTopology: true, useNewUrlParser: true });
+mongoose.connect("mongodb+srv://JuanUrdaneta:admin@cluster0.cyltp.mongodb.net/todolistDB", { useUnifiedTopology: true, useNewUrlParser: true });
 
 
 //Items Schema and Model MONGOOSE
@@ -111,21 +111,22 @@ app.post("/delete", (req, res) =>{
 
 app.get("/:customListName", (req, res) =>{
   const customListName = _.capitalize(req.params.customListName);
+  console.log(customListName);
 
 
-
-  List.findOne({name: customListName}, (err, listsFound)=>{
+  List.findOne({name: customListName}, (err, foundList)=>{
     if(!err){
-      if(!listsFound){
+      if(!foundList){
         // IF THE LIST DOESNT EXISTS, THEN WE CREATE A NEW LIST
         const list = new List({
         name : customListName,
         items: defaultItems
         })
-        list.save().then(res.redirect("/"+customListName));
+        list.save()
+        res.redirect("/"+customListName);
       } else{
         // IF THE LIST ALREADY EXIST THEN WE SHOW THE LIST
-        res.render("list", { listTitle: listsFound.name, newTodo : listsFound.items });
+        res.render("list", { listTitle: foundList.name, newTodo : foundList.items });
 
       }
     }
@@ -138,6 +139,13 @@ app.get("/about", (req,res) =>{
   res.render("about");
 });
 
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
+//IF PORT IS ON HEROKU THEN USE THEIR PORT, ELSE JUST USE LOCALHOST:3000
+
+let port = process.env.PORT;
+if(port == null || port == ""){
+  port = 3000;
+}
+
+app.listen(port, () => {
+  console.log("Server started succesfully");
 });
